@@ -66,34 +66,24 @@
       display: block;
       margin: 0 auto;
     }
-    section {
-      padding: 40px 20px;
-    }
-    .outlook-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-      margin-top: 20px;
-    }
     .outlook-card {
       background-color: rgba(0, 0, 0, 0.6);
-      border-radius: 10px;
-      padding: 15px;
-      width: 300px;
-      text-align: left;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      border-radius: 12px;
+      margin: 20px auto;
+      padding: 20px;
+      width: 80%;
+      max-width: 700px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     }
     .outlook-card img {
       width: 100%;
-      height: auto;
-      border-radius: 8px;
-      margin-bottom: 10px;
+      border-radius: 10px;
+      max-height: 700px;
+      object-fit: cover;
     }
-    .outlook-text h3 {
-      margin: 0 0 10px;
-      font-size: 20px;
-      color: #fff;
+    .outlook-text {
+      text-align: left;
+      margin-top: 15px;
     }
     footer {
       background-color: #111;
@@ -108,52 +98,26 @@
     <h1>Boston Weather</h1>
     <nav>
       <ul>
-        <li><a href="#home">Home</a></li>
-        <li><a href="#example">Example Outlooks</a></li>
-        <li><a href="#active">Active Outlooks</a></li>
+        <li><a href="">Home</a></li>
       </ul>
     </nav>
   </header>
 
   <main>
-    <section id="home">
-      <p><strong>Boston Weather is operated by a 13y old student at Boston Grammar School.</strong> 
-      I provide my thoughts on severe weather, make my own outlooks, etc!</p>
-      <div class="slider">
-        <div class="slides">
-          <img src="WhatsApp Image 2024-10-08 at 17.40.52.jpeg" class="active" alt="Weather Image 1">
-          <img src="WhatsApp Image 2024-10-08 at 17.40.52 (1).jpeg" alt="Weather Image 2">
-          <img src="bb5997e4-cfc2-4543-814f-33602ec49cd2.jpg" alt="Weather Image 3">
-          <img src="27550346-ee4c-40c1-a14b-1e28696646d3.jpg" alt="Weather Image 4">
-        </div>
+    <p><strong>Boston Weather is operated by a 13y old student from Boston Grammar School.</strong> 
+    I provide my thoughts on severe weather, make my own outlooks, etc! Below are some images from my DJI Mini 3, and then any active outlooks.</p>
+
+    <section class="slider">
+      <div class="slides">
+        <img src="images/DJI_0036.JPG" class="active" alt="">
+        <img src="images/DJI_0057.JPG" alt="Weather Image 2">
+        <img src="images/DJI_0159.JPG" alt="Weather Image 3">
       </div>
     </section>
 
-    <section id="example">
-      <h2>Example Outlooks</h2>
-      <div class="outlook-grid">
-        <div class="outlook-card">
-          <img src="example1.jpg" alt="Example Outlook 1">
-          <div class="outlook-text">
-            <h3>Severe Thunderstorm Risk – July 2024</h3>
-            <p>A line of storms developed over Lincolnshire bringing hail and gusty winds.</p>
-          </div>
-        </div>
-        <div class="outlook-card">
-          <img src="example2.jpg" alt="Example Outlook 2">
-          <div class="outlook-text">
-            <h3>Heavy Snowfall – Jan 2024</h3>
-            <p>Persistent snowfall caused disruptions across Boston with over 10cm falling.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="active">
+    <section>
       <h2>Active Outlooks</h2>
-      <div class="outlook-grid" id="activeOutlookContainer">
-        <!-- JS will insert active outlook or message -->
-      </div>
+      <div id="activeOutlookContainer"></div>
     </section>
   </main>
 
@@ -162,10 +126,8 @@
   </footer>
 
   <script>
-    // Update footer year
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    // Slider Logic
     let index = 0;
     const images = document.querySelectorAll(".slides img");
     function changeImage() {
@@ -175,34 +137,41 @@
     }
     setInterval(changeImage, 3000);
 
-    // Active Outlook Logic
-    const activeContainer = document.getElementById("activeOutlookContainer");
+    async function loadOutlooks() {
+      const now = new Date();
+      const response = await fetch("outlooks.json");
+      const outlooks = await response.json();
+      const activeNow = outlooks.filter(o => {
+        const start = new Date(o.start);
+        const end = new Date(o.end);
+        return now >= start && now <= end;
+      });
 
-    // Edit this date/time for your active outlook end
-    const outlookEndTime = new Date("2025-04-15T23:59:59");
-    const now = new Date();
-
-    if (now < outlookEndTime) {
-      activeContainer.innerHTML = `
-        <div class="outlook-card">
-          <img src="active1.jpg" alt="Active Outlook">
-          <div class="outlook-text">
-            <h3>Severe Weather Risk – valid until ${outlookEndTime.toLocaleString()}</h3>
-            <p>Showers and storms may become intense with hail, gusty winds and lightning. Stay weather aware!</p>
+      const container = document.getElementById("activeOutlookContainer");
+      if (activeNow.length > 0) {
+        container.innerHTML = activeNow.map(o => `
+          <div class="outlook-card">
+            <img src="${o.image}" alt="${o.title}">
+            <div class="outlook-text">
+              <h3>${o.title}</h3>
+              <p>${o.text}</p>
+            </div>
           </div>
-        </div>
-      `;
-    } else {
-      activeContainer.innerHTML = `
-        <div class="outlook-card">
-          <img src="no_outlook.jpg" alt="No Active Outlook">
-          <div class="outlook-text">
-            <h3>No active outlooks</h3>
-            <p>As of ${now.toLocaleString()}, there are no weather outlooks currently in effect.</p>
+        `).join("");
+      } else {
+        container.innerHTML = `
+          <div class="outlook-card">
+            <img src="images/no_outlook.jpg" alt="No Active Outlook">
+            <div class="outlook-text">
+              <h3>No active outlooks</h3>
+              <p>As of ${now.toLocaleString()}, there are no weather outlooks currently in effect.</p>
+            </div>
           </div>
-        </div>
-      `;
+        `;
+      }
     }
+
+    loadOutlooks();
   </script>
 </body>
 </html>

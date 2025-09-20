@@ -232,7 +232,6 @@
       </div>
     </section>
 
-   
     <section>
       <h2>Active Outlooks</h2>
       <div id="activeOutlookContainer"></div>
@@ -263,24 +262,6 @@
       images[index].classList.add("active");
     }
     setInterval(changeImage, 3000);
-
-    async function loadForecast() {
-      const response = await fetch("https://api.openweathermap.org/data/2.5/weather?lat=52.978&lon=-0.030&appid=6fe9ff0d8accbdad137e10cfddd0a3fb&units=metric");
-      const data = await response.json();
-      const container = document.getElementById('forecastContainer');
-
-      container.innerHTML = `
-        <div class="forecast-card">
-          <div class="forecast-text">
-            <h3>${data.name}</h3>
-            <p><strong>Temperature:</strong> ${data.main.temp}°C</p>
-            <p><strong>Condition:</strong> ${data.weather[0].description}</p>
-            <p><strong>Humidity:</strong> ${data.main.humidity}%</p>
-            <p><strong>Wind:</strong> ${data.wind.speed} m/s</p>
-          </div>
-        </div>
-      `;
-    }
 
     async function loadOutlooks() {
       const now = new Date();
@@ -324,7 +305,6 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    loadForecast();
     loadOutlooks();
   </script>
 </body>

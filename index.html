@@ -242,8 +242,14 @@
     <a href="https://x.com/BostonWeatherUK">
       <img src="images/X.jpg" alt="X" style="width: 50px;">
     </a>
+    <a href="https://bsky.app/profile/bostonweather.co.uk">
+      <img src="images/bsky.jpg" alt="Bluesky" style="width: 33px;">
+    </a>
     <a href="https://www.youtube.com/@BostonWeatherUK">
       <img src="images/yt.jpg" alt="Youtube" style="width: 40px;">
+    </a>
+    <a href="https://www.facebook.com/profile.php?id=61579310134620">
+      <img src="images/facebook_logo_primary.jpg" alt="Facebook" style="width: 32px">
     </a>
   </section>
 
@@ -289,8 +295,8 @@
           <div class="outlook-card">
             <img src="" alt="No risk active.">
             <div class="outlook-text">
-              <h3>Flood Risk</h3>
-              <p>The Environment Agency have issued a flood alert: Lower River Witham, which covers Boston. It states: "Locations most affected will be low lying land and roads near rivers. Our forecasts indicate that flooding to properties is likely and therefore flood warnings are expected to be issued."</p>
+              <h3>No outlook active</h3>
+              <p>I have currently not issued any outlooks. As always, keep an eye on the Met Office warnings.</p>
             </div>
           </div>
         `;
@@ -299,8 +305,8 @@
 
     function updateClock() {
       const now = new Date();
-      const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-      document.getElementById('clock').textContent = timeString;
+      const timeString = now.toLocaleTimeString([], {hour: "2-digit", minute:"2-digit"});
+      document.getElementById("clock").textContent = timeString;
     }
     setInterval(updateClock, 1000);
     updateClock();

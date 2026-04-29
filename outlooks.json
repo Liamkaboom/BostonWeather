@@ -3,14 +3,14 @@
       "title": "Convective Outlook – valid Thursday 1st May 6:00 to Friday 2nd May 6.00",
       "start": "2025-05-01T06:00:00",
       "end": "2025-05-02T6:00:00",
-      "image": "C:\\Users\\lukeh\\Downloads\\ConvectiveOutlook.png",
+      "image": "images/outlooks/ConvectiveOutlook.png",
       "text": "There is a MDT risk of thunderstorms today, looks to be a nowcasting day. "
     },
     {
       "title": "? Outlook – valid ? to ?",
       "start": "YYYY-MM-DDT06:00:00",
       "end": "YYYY-MM-DDT06:00:00",
-      "image": "C:\\Users\\lukeh\\Downloads\\ConvectiveOutlook.png",
+      "image": "images/outlooks/ConvectiveOutlook.png",
       "text": "There is a risk of ..."
     }
   ]
